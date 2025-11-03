@@ -134,18 +134,18 @@ sort(iris_clean$Sepal.Width,decreasing = FALSE) #comprobación de que quitamos e
   * Emplea después la función `na.omit` para quedarnos solo con las filas con datos completos en un nuevo data frame `clean_iris`.
 
 ```{r Solucion ejercicio 3, include=TRUE, echo=TRUE, eval=TRUE, results=TRUE}
-complete.cases(iris_clean$Longitud_Sepalo)
-sum(complete.cases(iris_clean$Longitud_Sepalo))
-nrow(iris_clean)
 
-porc_longsep<-sum(complete.cases(iris_clean$Longitud_Sepalo))/nrow(iris_clean) *100
+porc_longsep<-sum(complete.cases(iris_clean$Sepal.Length))/nrow(iris_clean) *100
 porc_longsep
 
-porc_anchsep<-sum(complete.cases(iris_clean$Ancho_Sepalo))/nrow(iris_clean) *100
+porc_anchsep<-sum(complete.cases(iris_clean$Sepal.Width))/nrow(iris_clean) *100
 porc_anchsep
 
-porc_longpet<-sum(complete.cases(iris_clean$Longitud_Petalo))/nrow(iris_clean) *100
+porc_longpet<-sum(complete.cases(iris_clean$Petal.Length))/nrow(iris_clean) *100
 porc_longpet
+
+porc_anchpet<-sum(complete.cases(iris_clean$Petal.Width))/nrow(iris_clean) *100
+porc_anchsep
 
 clean_iris<-na.omit(iris_clean)
 

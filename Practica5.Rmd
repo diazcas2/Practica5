@@ -344,7 +344,7 @@ outliersirispet<-outliersirispet %>% mutate(Petal.Length1=ifelse(is.na(Petal.Len
   * Imputa los missing data en `Petal.Length` empleando en esta ocasión la media para cada tipo de `Species` (usar`group_by` y `mutate`) creando una nueva variable `Petal.Length2`.
 
 ```{r Solucion ejercicio 9b, include=TRUE, echo=TRUE, eval=TRUE, results=TRUE}
-outliersirispet<-outliersirispet %>% group_by(Species) %>% mutate(Petal.Length2=ifelse(is.na(Petal.Length),mean(Petal.Length,na.rm=TRUE),Petal.Length))
+pet2<-outliersirispet %>% group_by(Species) %>% mutate(Petal.Length2=ifelse(is.na(Petal.Length),mean(Petal.Length,na.rm=TRUE),Petal.Length))
 ```
 
 ## Ejercicio 10: Representación gráfica
@@ -354,14 +354,14 @@ Vamos a comparar ahora los dos métodos de imputación gráficamente eliminando 
   * Recalcula las reglas de identificación de outliers (Ejercicio 6) para la nueva variable `Petal.Length2`.
   
 ```{r Solucion ejercicio 10a, include=TRUE, echo=TRUE, eval=TRUE, results=TRUE}
-
- 
+outliersirispet2<- pet2%>% mutate(across(Petal.Length,list(outliers_3sigma= ~reglasigma(.x),outliers_Hampel=~reglahampel(.x),outliers_boxplot=~reglaboxplot(.x),outliers_percentiles=~reglapercentil(.x))))
 ```
 
   * Representa los dos tipos de imputación empleados en un gráfico de dispersión (`Petal.Length1` vs. `Petal.Length2`) eliminando los outliers identificados con la regla `reglapercentil` y poniendo en diferente color los datos originales y los imputados.
 
 ```{r Solucion ejercicio 10b, include=TRUE, echo=TRUE, eval=TRUE, results=TRUE}
-
+ggplot(outliersirispet2, aes(x =Petal.Length_outliers_percentiles, y = Petal.Length2)) +
+  geom_point(position = 'jitter')
 
 
 ```

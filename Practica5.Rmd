@@ -108,6 +108,22 @@ Nota: Puedes reemplazar los valores para cada variable del dataframe usando `mut
 ```{r Solucion ejercicio 2, include=TRUE, echo=TRUE, eval=TRUE, results=TRUE}
 # DEBEMOS ELIMINAR TAMBIEN LOS VALROES IGUALES A CERO YA QUE SE TRATA DE LONGITUDES DE PARTES DE UNA FLOR. NO PUEDEN SER O
 
+is.finite(dirty_iris$Sepal.Length)
+is.finite(dirty_iris$Sepal.Width)
+is.finite(dirty_iris$Petal.Length)
+is.finite(dirty_iris$Petal.Width)
+
+library(dplyr)
+
+iris_clean <- dirty_iris %>%
+  mutate(
+    Sepal.Length = ifelse(!is.finite(Sepal.Length) | Sepal.Length <= 0, NA, Sepal.Length),
+    Sepal.Width  = ifelse(!is.finite(Sepal.Width)  | Sepal.Width  <= 0, NA, Sepal.Width),
+    Petal.Length = ifelse(!is.finite(Petal.Length) | Petal.Length <= 0, NA, Petal.Length),
+    Petal.Width  = ifelse(!is.finite(Petal.Width)  | Petal.Width  <= 0, NA, Petal.Width)
+  )
+
+sort(iris_clean$Sepal.Width,decreasing = FALSE) #comprobación de que quitamos el -3
 
 ```
 
@@ -118,6 +134,21 @@ Nota: Puedes reemplazar los valores para cada variable del dataframe usando `mut
   * Emplea después la función `na.omit` para quedarnos solo con las filas con datos completos en un nuevo data frame `clean_iris`.
 
 ```{r Solucion ejercicio 3, include=TRUE, echo=TRUE, eval=TRUE, results=TRUE}
+complete.cases(iris_clean$Longitud_Sepalo)
+sum(complete.cases(iris_clean$Longitud_Sepalo))
+nrow(iris_clean)
+
+porc_longsep<-sum(complete.cases(iris_clean$Longitud_Sepalo))/nrow(iris_clean) *100
+porc_longsep
+
+porc_anchsep<-sum(complete.cases(iris_clean$Ancho_Sepalo))/nrow(iris_clean) *100
+porc_anchsep
+
+porc_longpet<-sum(complete.cases(iris_clean$Longitud_Petalo))/nrow(iris_clean) *100
+porc_longpet
+
+clean_iris<-na.omit(iris_clean)
+
 
 ```
 

@@ -170,7 +170,36 @@ Hazlo para el data frame con observaciones completas `clean_iris` (que no tiene 
   * Compara los resultados para los dos conjuntos en la variable `Petal.Length`.
 
 ```{r , include = TRUE}
+resumenclean<-clean_iris %>% 
+  summarise(across(where(is.numeric),list(
+                     media = ~ mean(.x, na.rm = TRUE),
+                     mediana = ~ median(.x, na.rm = TRUE),
+                     madm = ~ mad(.x, na.rm = TRUE),
+                     iqr= ~ IQR(.x, na.rm = TRUE))))
 
+resumendirty<-dirty_iris %>% 
+  summarise(across(where(is.numeric),list(
+                     media = ~ mean(.x, na.rm = TRUE),
+                     mediana = ~ median(.x, na.rm = TRUE),
+                     madm = ~ mad(.x, na.rm = TRUE),
+                     iqr= ~ IQR(.x, na.rm = TRUE))))
+
+resumenclean<resumendirty #Para compararlos
+```
+
+```{r}
+madm<-function(x){
+  if (all(is.na(x))) {
+    warning("Todos los valores son NA")
+    return(NA)
+  } else {
+    x_no_na <- x[!is.na(x)]
+    return(1.4826*mean(abs(x_no_na-mean(x_no_na))))
+  }
+}
+
+madm(clean_iris$Petal.Length)
+madm(dirty_iris$Petal.Length)
 ```
 
 

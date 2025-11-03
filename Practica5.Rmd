@@ -286,22 +286,22 @@ sum(outliersirispet$Petal.Length_outliers_boxplot)
 sum(outliersirispet$Petal.Length_outliers_percentiles)
 
 lista_outliers <- list(
-  `3sigma` = outliersiris %>%
+  `3sigma` = outliersirispet %>%
     filter(Petal.Length_outliers_3sigma) %>%
     arrange(Petal.Length) %>%
     pull(Petal.Length),
   
-  `Hampel` = outliersiris %>%
+  `Hampel` = outliersirispet %>%
     filter(Petal.Length_outliers_Hampel) %>%
     arrange(Petal.Length) %>%
     pull(Petal.Length),
   
-  `Boxplot` = outliersiris %>%
+  `Boxplot` = outliersirispet %>%
     filter(Petal.Length_outliers_boxplot) %>%
     arrange(Petal.Length) %>%
     pull(Petal.Length),
   
-  `Percentiles` = outliersiris %>%
+  `Percentiles` = outliersirispet %>%
     filter(Petal.Length_outliers_percentiles) %>%
     arrange(Petal.Length) %>%
     pull(Petal.Length)
@@ -317,7 +317,10 @@ Representa gráficamente los datos de `Petal.Length` (distribución de puntos en
 Nota: usa en `geom_point` con la opción `position='jitter'` para mejorar la legibilidad del gráfico.
 
 ```{r Solucion ejercicio 8, include=TRUE, echo=TRUE, eval=TRUE, results=TRUE}
-
+library(ggplot2)
+outliersirispet<-outliersirispet %>% pivot_longer(cols=6:9,names_to ='Outliers',values_to = 'Valores')
+ggplot(outliersirispet, aes(x=Outliers,y=Petal.Length,color = 
+                              Outliers))+geom_point(position='jitter')
 ```
 
 # Imputación de datos

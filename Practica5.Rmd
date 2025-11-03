@@ -220,9 +220,9 @@ Escribe una función que detecte los outliers de un vector $x$ para cada uno de 
 reglasigma<-function(x){
   media<-mean(x,na.rm=TRUE)
   sd<-sd(x,na.rm=TRUE)
-  outlier<-abs(x - media) > 3 * sd_x
+  outlier<-abs(x - media) > 3 * sd
   outlier[is.na(outlier)] <- FALSE   
-  return(outliers)
+  return(outlier)
 }
 
 # Identificador Hampel
@@ -232,7 +232,7 @@ reglahampel<-function(x){
   
   outlier<-abs(x-mediana)>3*madm
   outlier[is.na(outlier)] <- FALSE
-  return(outliers)
+  return(outlier)
 }
 
 
@@ -246,7 +246,7 @@ reglaboxplot<-function(x){
   
   outlier<-x < inf | x > sup
   outlier[is.na(outlier)] <- FALSE
-  return(outliers)
+  return(outlier)
 }
 
 # Percentiles
@@ -256,9 +256,8 @@ reglapercentil<-function(x){
   
   outlier<-x < c1 | x > c95
   outlier[is.na(outlier)] <- FALSE
-  return(outliers)
+  return(outlier)
 }
-
 ```
 
 
@@ -268,9 +267,9 @@ Utiliza la función `mutate` y `across` para identificar los outliers en la vari
 Nota: podría extenderse la aplicación a todas las variables numéricas usando también `mutate`, `across` y `where`. 
 
 ```{r Solucion ejercicio 6, include=TRUE, echo=TRUE, eval=TRUE, results=TRUE}
+outliersiris<-clean_iris %>% mutate(across(Petal.Length,list(outliers_3sigma= ~reglasigma(.x),outliers_Hampel=~reglahampel(.x),outliers_boxplot=~reglaboxplot(.x),outliers_percentiles=~reglapercentil(.x))))
 
-
-
+outliersiristotal<-clean_iris %>% mutate(across(where(is.numeric),list(outliers_3sigma= ~reglasigma(.x),outliers_Hampel=~reglahampel(.x),outliers_boxplot=~reglaboxplot(.x),outliers_percentiles=~reglapercentil(.x))))
 ```
 
 ## Ejercicio 7: Comparativa de los métodos de detección de outliers

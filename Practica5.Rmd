@@ -267,7 +267,7 @@ Utiliza la función `mutate` y `across` para identificar los outliers en la vari
 Nota: podría extenderse la aplicación a todas las variables numéricas usando también `mutate`, `across` y `where`. 
 
 ```{r Solucion ejercicio 6, include=TRUE, echo=TRUE, eval=TRUE, results=TRUE}
-outliersiris<-clean_iris %>% mutate(across(Petal.Length,list(outliers_3sigma= ~reglasigma(.x),outliers_Hampel=~reglahampel(.x),outliers_boxplot=~reglaboxplot(.x),outliers_percentiles=~reglapercentil(.x))))
+outliersirispet<-clean_iris %>% mutate(across(Petal.Length,list(outliers_3sigma= ~reglasigma(.x),outliers_Hampel=~reglahampel(.x),outliers_boxplot=~reglaboxplot(.x),outliers_percentiles=~reglapercentil(.x))))
 
 outliersiristotal<-clean_iris %>% mutate(across(where(is.numeric),list(outliers_3sigma= ~reglasigma(.x),outliers_Hampel=~reglahampel(.x),outliers_boxplot=~reglaboxplot(.x),outliers_percentiles=~reglapercentil(.x))))
 ```
@@ -280,7 +280,34 @@ En los métodos de detección de outliers analizados, examina los resultados com
   * Los valores etiquetados como outliers (ordenados de menor a mayor).
 
 ```{r Solucion ejercicio 7, include=TRUE, echo=TRUE, eval=TRUE, results=TRUE}
+sum(outliersirispet$Petal.Length_outliers_3sigma)
+sum(outliersirispet$Petal.Length_outliers_Hampel)
+sum(outliersirispet$Petal.Length_outliers_boxplot)
+sum(outliersirispet$Petal.Length_outliers_percentiles)
 
+lista_outliers <- list(
+  `3sigma` = outliersiris %>%
+    filter(Petal.Length_outliers_3sigma) %>%
+    arrange(Petal.Length) %>%
+    pull(Petal.Length),
+  
+  `Hampel` = outliersiris %>%
+    filter(Petal.Length_outliers_Hampel) %>%
+    arrange(Petal.Length) %>%
+    pull(Petal.Length),
+  
+  `Boxplot` = outliersiris %>%
+    filter(Petal.Length_outliers_boxplot) %>%
+    arrange(Petal.Length) %>%
+    pull(Petal.Length),
+  
+  `Percentiles` = outliersiris %>%
+    filter(Petal.Length_outliers_percentiles) %>%
+    arrange(Petal.Length) %>%
+    pull(Petal.Length)
+)
+
+lista_outliers
 ```
 
 ## Ejercicio 8: Representación gráfica
